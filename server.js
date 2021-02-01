@@ -15,7 +15,7 @@ const container = require('./container');
 
 container.resolve(function(users){
     mongoose.Promise = global.Promise;
-    //mongoose.connect('mongodb://localhost/footballkik',{ useNewUrlParser: true })
+    mongoose.connect('mongodb://localhost/footballkik',{ useNewUrlParser: true })
 
     const app = setupExpress();
 
@@ -38,7 +38,7 @@ container.resolve(function(users){
 
 
     function configureExpress(app){
-        app.use(express.static('public'));
+        app.use(express.static(__dirname + '/public'));
         app.use(cookieParser());
         app.set('view engine', 'ejs');
         app.use(bodyParser.json());
@@ -48,7 +48,7 @@ container.resolve(function(users){
         app.use(session({
             secret:'thisisasecretkey',
             resave: true,
-            saveUninitialized: true,
+            saveInitialized: true,
             store: new mongoStore({mongooseConnection : mongoose.connection}) 
         }))
         app.use(flash())
